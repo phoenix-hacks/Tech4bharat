@@ -1,0 +1,297 @@
+/* Home page styles */
+.home-container {
+  font-family: Arial, sans-serif;
+  padding: 0 20px;
+  color: #333;
+}
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    padding: 260px 0;
+    height: 800;
+    background-image: url('C:\Users\Jo\Desktop\prc\copycat\src\assets\Image\home.png'); /* Path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: white;  /* Text color for contrast */
+  }
+
+.hero-text {
+  max-width: 50%;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero-text p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.navbar.dark .home,
+.navbar.dark .logo img {
+  color: white;
+}
+
+.dark-mode-btn {
+  background-color: #6161df;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+}
+
+.dark-mode-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Optional: Add hover effects and transitions */
+.navbar.dark .home {
+  color: white; /* Change home text color to white */
+  
+}
+
+
+/* Why Choose Us Section */
+body.why-choose-us {
+  padding: 50px 0;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.why-choose-us h2 {
+  font-size: 2.5rem;
+  color: #000;
+  margin-bottom: 30px;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  width: 30%;
+  padding: 20px;
+  text-align: center;
+}
+
+.feature-item h3 {
+  font-size: 1.8rem;
+  margin: 10px 0;
+}
+
+.feature-item p {
+  font-size: 1rem;
+  color: #282727;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 105px;
+}
+
+/* Who's it For Section */
+body.whos-it-for {
+  padding: 100px 0;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+.whos-it-for h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.target-audience {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.audience-item {
+  width: 30%;
+  padding: 20px;
+  text-align: center;
+}
+
+.audience-item h3 {
+  font-size: 1.8rem;
+  margin: 10px 0;
+}
+
+.audience-item p {
+  font-size: 1rem;
+  color: #555;
+}
+
+
+/* Get Started Section */
+.get-started {
+  padding: 50px 0;
+  background-color: hsl(238, 64%, 76%);
+  color: white;
+  text-align: center;
+  background: linear-gradient(to top left, rgba(0, 123, 255, 0.6), rgba(255, 99, 71, 0.6));
+  min-height: 20vh; /* Ensure the background covers the entire screen */
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.get-started h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.get-started p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.get-started .cta-button {
+  background-color: #f8f8f8;
+  color: #649cd7;
+  font-size: 1.2rem;
+  padding: 12px 25px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.dark-mode .content, .dark-mode .section-title, .dark-mode p,.dark-mode h2 {
+  color: white; /* Ensure all text is white */
+}
+.dark-mode h3{
+  color: #f8f8f8;
+}
+
+
+
+/* For tablet and larger devices */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li a {
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+
+  .hero h2 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .cta-button {
+    font-size: 1.1rem;
+  }
+
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature-item {
+    padding: 1.2rem;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li a {
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+
+  .hero h2 {
+    font-size: 1.6rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    font-size: 1rem;
+    padding: 8px 15px;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-item {
+    padding: 1rem;
+  }
+}
+
+
+
+
+/* Hover Effect */
+.feature-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  border-radius: 8%;
+  border-color: #000;
+}
+
+.feature-item:hover {
+  color:#6161df
+}
+
+.audience-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  border-radius: 8%;
+}
+
+.audience-item:hover {
+  color:#6161df
+}
