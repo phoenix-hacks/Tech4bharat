@@ -1,5 +1,5 @@
-https://github.com/piyush-eon/mern-chat-app.git
-https://github.com/burakorkmez/mern-chat-app.git
-https://github.com/davehowson/chat-app.git
-https://github.com/burakorkmez/threads-clone.git
-https://github.com/Ntshembo-Hlongwane1/React-ChatApp.git
+https://github.com/benfluleck/full-stack-chat-application-graphql.git
+https://github.com/samiullah51/MERN-Stack-Real-Time-Chat-App.git
+https://github.com/MertCankaya/Mern-Messenger-Clone.git
+https://github.com/NitinVadadoriyaa/JerryChat.git
+https://github.com/stanleyclaudius/chat-app.git

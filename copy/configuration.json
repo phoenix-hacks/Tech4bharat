@@ -1,12 +1,43 @@
 {
   "test_directories": [
-    "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\test_directory"
+    "C:\\Users\\csidd\\OneDrive\\Desktop\\prchacks\\copy\\test_directory"
   ],
   "reference_directories": [
-    "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\ref_directory\\React-ChatApp"
+    "C:\\Users\\csidd\\OneDrive\\Desktop\\prchacks\\copy\\ref_directory\\chat-app"
   ],
   "extensions": [
+    "html",
+    "css",
+    "scss",
+    "sass",
+    "js",
     "jsx",
-    "js"
+    "ts",
+    "tsx",
+    "json",
+    "md",
+    "vue",
+    "graphql",
+    "py",
+    "java",
+    "rb",
+    "go",
+    "php",
+    "sh",
+    "bash",
+    "pl",
+    "c",
+    "cpp",
+    "swift",
+    "sql",
+    "db",
+    "yaml",
+    "yml",
+    "xml",
+    "ini",
+    "env",
+    "toml",
+    "lock",
+    "ipynb"
   ]
 }

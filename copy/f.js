@@ -1,6 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { exec } from 'child_process';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let index = 1;
 
@@ -20,7 +24,11 @@ async function rf() {
         const urls = data.split('\n').map(url => url.trim()).filter(url => url); // Clean URLs
         for (const url of urls) {
             console.log(`Cloning repo: ${url}`);
-            await cloneRepoAndRunCheck(url);
+            try {
+                await cloneRepoAndRunCheck(url);
+            } catch (err) {
+                console.error(`Error processing repo: ${url}`, err);
+            }
         }
     });
 }
@@ -35,7 +43,7 @@ async function cloneRepoAndRunCheck(url) {
 
         exec(`git clone ${url} ${clonePath}`, (error, stdout, stderr) => {
             if (error) {
-                console.error(`Git clone error: ${error}`);
+                console.error(`Git clone error: ${error.message}`);
                 reject(error);
                 return;
             }
@@ -50,36 +58,81 @@ async function cloneRepoAndRunCheck(url) {
 
 // Clean the cache directory
 async function cleanCache() {
+    const retryInterval = 100; // Retry every 100ms
+    const maxRetries = 10; // Retry up to 10 times
+    let attempts = 0;
+
     return new Promise((resolve, reject) => {
-        try {
-            if (fs.existsSync(refDirectoryPath)) {
-                console.log('Cleaning cache...');
-                fs.rmSync(refDirectoryPath, { recursive: true, force: true });
+        const clean = () => {
+            try {
+                if (fs.existsSync(refDirectoryPath)) {
+                    console.log('Cleaning cache...');
+                    fs.rmSync(refDirectoryPath, { recursive: true, force: true });
+                }
+                fs.mkdirSync(refDirectoryPath, { recursive: true });
+                console.log('Cache cleared and recreated.');
+                resolve();
+            } catch (error) {
+                if (error.code === 'EBUSY' && attempts < maxRetries) {
+                    attempts++;
+                    console.warn(`Cache cleanup failed, retrying... (${attempts}/${maxRetries})`);
+                    setTimeout(clean, retryInterval);
+                } else {
+                    console.error('Error cleaning cache:', error.message);
+                    reject(error);
+                }
             }
-            fs.mkdirSync(refDirectoryPath, { recursive: true });
-            console.log('Cache cleared and recreated.');
-            resolve();
-        } catch (error) {
-            console.error('Error cleaning cache:', error);
-            reject(error);
-        }
+        };
+
+        clean();
     });
 }
 
-// Run plagiarism check
 async function runPlagiarismCheck(repoName) {
     return new Promise((resolve, reject) => {
         const configuration = {
             test_directories: [testDirectoryPath],
             reference_directories: [path.join(refDirectoryPath, repoName)],
-            extensions: ['jsx', 'js'],
+            extensions: ["html",
+    "css",
+    "scss",
+    "sass",
+    "js",
+    "jsx",
+    "ts",
+    "tsx",
+    "json",
+    "md",
+    "vue",
+    "graphql",
+    "py",
+    "java",
+    "rb",
+    "go",
+    "php",
+    "sh",
+    "bash",
+    "pl",
+    "c",
+    "cpp",
+    "swift",
+    "sql",
+    "db",
+    "yaml",
+    "yml",
+    "xml",
+    "ini",
+    "env",
+    "toml",
+    "lock",
+    "ipynb"],
         };
 
         fs.writeFileSync('configuration.json', JSON.stringify(configuration, null, 2));
 
         exec('copydetect -c configuration.json', (error, stdout, stderr) => {
             if (error) {
-                console.error(`Copydetect error: ${error}`);
+                console.error(`Copydetect error: ${error.message}`);
                 reject(error);
                 return;
             }
@@ -91,7 +144,7 @@ async function runPlagiarismCheck(repoName) {
             const reportPath = `report${index}.html`;
             exec(`mv report.html ${reportPath}`, (mvError, mvStdout, mvStderr) => {
                 if (mvError) {
-                    console.error(`Report rename error: ${mvError}`);
+                    console.error(`Report rename error: ${mvError.message}`);
                     reject(mvError);
                     return;
                 }
