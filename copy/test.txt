@@ -1,0 +1,4 @@
+we need extract each url in clone_urls.txt file and execute command   
+git clone <reference-repo url -1> ref_directory/
+node f.js
+store the resultant report.html

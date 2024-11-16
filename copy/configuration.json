@@ -1,0 +1,12 @@
+{
+  "test_directories": [
+    "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\test_directory"
+  ],
+  "reference_directories": [
+    "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\ref_directory\\React-ChatApp"
+  ],
+  "extensions": [
+    "jsx",
+    "js"
+  ]
+}

@@ -1,0 +1,756 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Copy Detection Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+  <style>
+    h1 {
+      text-align: center;
+    }
+    .highlight-green {
+      background-color: #b6f2b6;
+    }
+    .highlight-red {
+      background-color: #f2b6b6;
+    }
+    pre {
+      text-align: left;
+    }
+    .col3 {
+      float: left;
+      width: 33%;
+    }
+    .file-info-list {
+      max-height: 900px;
+      overflow-y: scroll;
+    }
+    .main-report-div {
+      margin-top: 3em;
+      max-width: 1400px;
+    }
+    .code-display {
+      max-width: 600px
+    }
+  </style></head>
+<body>
+<div class="container main-report-div">
+  <h1 style="margin-bottom: 1em;">Copy Detection Report</h1>
+  <h2>Overview</h2>
+    <div class="container d-flex justify-content-center">
+      <div class="col">
+        <h4 style="text-align: center;">Similarity Matrix</h4>
+        <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAAA10dzkAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjkuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8hTgPZAAAACXBIWXMAAA9hAAAPYQGoP6dpAAAvzklEQVR4nO3df3BT553v8Y9kYxkwEhgWKQZTkx8bwqZAa8dG6a8sUePm9mZCQ3dob7d4vQw7u7EzAW23HdoE2jS5pkmWOOk6eJsCuU1D4dIJyaS3hU2dQCc35pcpt+QH7i9YnBAJ6L3YxKl/IJ37R4ISBYNE/Eg60nm/Zs5MdPToOV89kZnvfJ/zPMdlWZYlAAAAOIY71wEAAAAgu0gAAQAAHIYEEAAAwGFIAAEAAByGBBAAAMBhSAABAAAchgQQAADAYUgAAQAAHIYEEAAAwGFIAAEAAByGBBAAAMBhSAABAAAchgQQAADAYUgAAQAAHKY41wEA6YjH4zp+/LgmTJggl8uV63AAwLYsy9KZM2dUUVEhtzv7dZ6BgQENDQ0Z7bOkpESlpaVG+3Q6EkDkhePHj6uysjLXYQBA3ujp6dH06dOzes2BgQHN/EiZIidiRvsNBAI6cuQISaBBJIDImra2Nj3wwAOKRCKaO3euvv/976u2tjatz06YMEGS9En9FxVrzAXbvXXbdSn7KntqX3oBG1I87bKUbc6+8WYWIrk06YyllP3xLGT5+lvJtt4vpf53w7d5bxYiuTTZ+v97VsN6UT9P/LuZTUNDQ4qciOk/u6rknWCm+th3Jq6PVB/V0NAQCaBBJIDIii1btigcDqu9vV11dXVqbW1VfX29uru7NXXq1JSfPzftW6wxKnZdOAEsHpP6H4eLfT4Tit2e1I2yHFM60hlLKfvjWcjy9beSbUUl9vs7T0fW/v9a73aVw9tlyia4VDbBzPXj4rafTGARCLJi7dq1WrZsmRobGzV79my1t7dr3Lhx2rBhQ65DAwDAcagAIuOGhobU1dWllStXJs653W6FQiF1dnaO+JnBwUENDg4mXvf19WU8TgCAGTErrphlri+YRwUQGXfq1CnFYjH5/f6k836/X5FIZMTPtLS0yOfzJQ4WgABA/ojLMnrAPBJA2NLKlSvV29ubOHp6enIdEgAABYMpYGTclClTVFRUpGg0mnQ+Go0qEAiM+BmPxyOPJ40bpgEAthNXXKYmbs31hPejAoiMKykpUXV1tTo6OhLn4vG4Ojo6FAwGcxgZAADORAUQWREOh9XQ0KCamhrV1taqtbVV/f39amxsvKR+iq65SkVFF64Mlv3P3aMNNcH1sb9K2cb69Ssp25x9/Q0T4WSdybHMtuLLRq4sv9/ZN0e+/zSX8vW3km0Tnxh58ZjdOen/b8yyFLPM3Ltnqh8kIwFEVixevFgnT57UqlWrFIlENG/ePG3fvv28hSEAgPxncvEGi0AygwQQWdPc3Kzm5uZchwEAgOORAAIAAKPishSjAmhrLAIBAABwGCqAAADAKO4BtD8SQAAAYBSrgO2PKWAAAACHoQIIAACMir97mOoL5pEAIq/EXvudXK4xWblWOps8w57suMkzANgJCSAAADAqZnAbGFP9IBkJIAAAMCpmvXOY6gvmsQgEAADAYagAAgAAo1gEYn9UAAEAAByGCiAAADAqLpdichnrC+aRAAIAAKPi1juHqb5gHlPAAAAADkMFEAAAGBUzOAVsqh8kIwFEQen/Yl3KNuN/uicLkbwnesf1Kdv4v/9SFiK5NOmMpZT98SxkxZdXpWxz9o9HMx6H3Zn6Oz/RlPpvU5Kmtpn5+zx7Y3XKNsUdXUauBaRCAggAAIyiAmh/JIAAAMCouOVS3DK0CthQP0jGIhAAAACHoQIIAACMYgrY/qgAAgAAOAwVQAAAYFRMbsUM1ZhiRnrBB5EAAgAAoyyDi0AsFoFkBFPAAAAADkMFEHnlP1fXyl1aesH3Z36zM4vRpMeOmzyngw2es49NntNj6rdpaoPndDlpk2cWgdgfFUAAAACHoQIIAACMilluxSxDi0AsI93gA0gAAQCAUXG5FDc0yRgXGWAmMAUMAADgMFQAAQCAUSwCsT8qgAAAAA5DBRAAABhldhEI9wBmAgkgAAAw6p1FIGambk31g2QkgMgrH/nOXhW7xuQ6DAAA8hoJIAAAMCout2JsA2NrLAIBAABwGCqAAADAKBaB2B8JIAAAMCouN08CsTmmgAEAAByGCiAAADAqZrkUsww9CcRQP0hGBRAAAMBhqAACAACjYga3gYlxD2BGkACioAyHqlO2GfPLrixE8p63b6tL2WbcU3uyEMmlSWcspeyPZyErmjI5ZZvYqT9lIRJ7G6qvSdmmZMf+lG2KL69K63pn/3g0rXapDH3uupRtxu77Q1p9xf70f0cbTkbFLbfihlYBx1kFnBFMAQMAADgMFUAAAGAUU8D2RwUQAADAYagAAgAAo+Iyt31L3Egv+CASQAAAYJTZJ4EwWZkJjCoAAIDDUAEEAABGxSy3Yoa2gTHVD5IxqgAAAA5DBRAAABgVl0txmVoEwrOAM4EEEAXFjk+lsONTPtJhx7EsdDzlIz3pPOUjHaae8JGuku37UraJZSGObGAK2P4YVQAAUFDa2tpUVVWl0tJS1dXVae/evWl9bvPmzXK5XFq4cGFmA7QBEkAAAGDUuSeBmDouxZYtWxQOh7V69WodOHBAc+fOVX19vU6cOHHRzx09elRf+9rX9KlPfWo0Xz1vkAACAICCsXbtWi1btkyNjY2aPXu22tvbNW7cOG3YsOGCn4nFYvrKV76i73znO7r88suzGG3ukAACAACj4pbL6JGuoaEhdXV1KRQKJc653W6FQiF1dnZe8HP33HOPpk6dqqVLl47qe+cTFoEAAACj4h9i6vZifUlSX19f0nmPxyOPx5N07tSpU4rFYvL7/Unn/X6/Dh8+PGL/L774otavX6+DBw8aiTdfUAEEAAC2V1lZKZ/PlzhaWlpG3eeZM2f01a9+VY899pimTJliIMr8QQUQAAAYFbfcihvavuVcPz09PfJ6vYnzH6z+SdKUKVNUVFSkaDSadD4ajSoQCJzX/g9/+IOOHj2qW2655b3rxeOSpOLiYnV3d+uKK64w8j3shgQQAAAYFZNLMUMbOJ/rx+v1JiWAIykpKVF1dbU6OjoSW7nE43F1dHSoubn5vPazZs3SoUOHks7dddddOnPmjB5++GFVVlYa+Q52RAIIAAAKRjgcVkNDg2pqalRbW6vW1lb19/ersbFRkrRkyRJNmzZNLS0tKi0t1bXXXpv0+YkTJ0rSeecLDQkgAAAwKhNTwOlavHixTp48qVWrVikSiWjevHnavn17YmHIsWPH5HazBIIEEAAAFJTm5uYRp3wlaefOnRf97OOPP24+IBsiAQQAAEbFJIP3ACITSAABAIBRuZwCRnoYVQAAAIehAggAAIyKWW7FDFXuTPWDZIwqAACAw1ABBAAARllyKW5oEYhlqB8kIwEERqFi94SUbY7PP5OFSIBLt+P4wZRt6ivmZTwOFB6mgO2PUQUAAHAYKoAAAMCouOVS3DIzdWuqHySjAggAAOAwVAABAIBRMbkVM1RjMtUPkpEAAgAAo5gCtj/SagAAAIehAggAAIyKy624oRqTqX6QjFEFAABwGCqAwCiwyTPsyPfi5LTasckzMiVmuRQzdO+eqX6QjAogRu1Xv/qVbrnlFlVUVMjlcunpp59Oet+yLK1atUqXXXaZxo4dq1AopN/97ne5CRYAkHHnFoGYOmAeCSBGrb+/X3PnzlVbW9uI799///165JFH1N7erj179mj8+PGqr6/XwMBAliMFAAASU8Aw4Oabb9bNN9884nuWZam1tVV33XWXbr31VknSj370I/n9fj399NP60pe+lM1QAQBZYFluxQ09w9fiWcAZwagio44cOaJIJKJQKJQ45/P5VFdXp87Ozgt+bnBwUH19fUkHAAAwgwQQGRWJRCRJfr8/6bzf70+8N5KWlhb5fL7EUVlZmdE4AQDmxOQyesA8EkDY0sqVK9Xb25s4enp6ch0SACBNccvkQpBcf5vCRAKIjAoEApKkaDSadD4ajSbeG4nH45HX6006AACAGSSAyKiZM2cqEAioo6Mjca6vr0979uxRMBjMYWQAgEyJv7sIxNQB81gFjFF766239Pvf/z7x+siRIzp48KDKy8s1Y8YMLV++XPfee6+uuuoqzZw5U3fffbcqKiq0cOHC3AUNAICDkQBi1Pbv36+//uu/TrwOh8OSpIaGBj3++OP6+te/rv7+fv3DP/yDTp8+rU9+8pPavn27SktLjccy+PnrUrbx/K99xq97MUXXXJWyTew1+22MXTT7L9NqF3v1txmOxDlM/VZ6P/knE+HYlqlxKvrLK9K6Xuy3f0irXcrrpfE3VSh/T3G5FDe0eMNUP0hGAohRu+GGG2RZF75L1+Vy6Z577tE999yTxagAALnCo+Dsj4l1AAAAh6ECCAAAjDK5eINFIJnBqAIAADgMFUAAAGBUXO9s4myqL5hHAggAAIyyDK4CtkgAM4IpYAAAAIehAggAAIw69xxfU33BPBJAFJRsb/KcDjtu8pyOQtmQNp/k628l20yNk6kNntO+Hn9TsBESQAAAYBTbwNgfCSAAADCKKWD7I60GAABwGCqAAADAqLjBbWDYBzAzqAACAAA4DBVAAABgFPcA2h8JIAAAMIoE0P6YAgYAAHAYKoAAAMAoKoD2RwUQAADAYagAAgAAo6gA2h8JIAAAMMqSuf37LCO94IOYAgYAAHAYKoAAAMAopoDtjwogAACAw1ABBAAARlEBtD8SQAAAYBQJoP2RACKv/Pm/Vqt4TOkF3x/79N4sRgO7Gg5Vp2wz5pddWYgEuXJ2QerfQPHz/AbgXCSAAADAKCqA9sciEAAAAIehAggAAIyyLJcsQ5U7U/0gGQkgAAAwKi6XsSeBmOoHyZgCBgAAcBgqgAAAwCgWgdgfFUAAAACHoQIIAACMYhGI/ZEAAgAAo5gCtj8SQOSVsT/rUrFrTK7DMG7y/56UVrs/feL/ZTiSwsBTPsBTPoCLIwEEAABGMQVsfywCAQAAcBgqgAAAwCjL4D2AVAAzgwQQAAAYZUmyLHN9wTymgAEAAByGCiAAADAqLpdcPAvY1qgAAgAAOAwVQAAAYBTbwNgfCSBgA2zwDKCQxC2XXDwJxNaYAgYAAHAYKoAAAMAoyzK4DQz7wGQECSAAADCKewDtjylgAAAAh6ECCAAAjKICaH9UAAEAAByGBBAAABgVt1xGj0vV1tamqqoqlZaWqq6uTnv37r1g26eeeko1NTWaOHGixo8fr3nz5umJJ54YzdfPCySAAADAqHOrgE0dl2LLli0Kh8NavXq1Dhw4oLlz56q+vl4nTpwYsX15ebm+9a1vqbOzU7/5zW/U2NioxsZG7dixw8BI2BcJIAAAKBhr167VsmXL1NjYqNmzZ6u9vV3jxo3Thg0bRmx/ww036Atf+IKuueYaXXHFFbrzzjs1Z84cvfjii1mOPLtIAAEAgFHvVO5cho70rzs0NKSuri6FQqHEObfbrVAopM7OzjTittTR0aHu7m59+tOf/jBfPW+wChgAANheX19f0muPxyOPx5N07tSpU4rFYvL7/Unn/X6/Dh8+fMG+e3t7NW3aNA0ODqqoqEiPPvqoPvvZz5oL3oaoAAIAAKPMVf/e206msrJSPp8vcbS0tBiLd8KECTp48KD27dun++67T+FwWDt37jTWvx1RAQQAAEZZ7x6m+pKknp4eeb3exPkPVv8kacqUKSoqKlI0Gk06H41GFQgELngNt9utK6+8UpI0b948vfbaa2ppadENN9ww6vjtigogAACwPa/Xm3SMlACWlJSourpaHR0diXPxeFwdHR0KBoNpXysej2twcNBI3HZFBRAAABiVyyeBhMNhNTQ0qKamRrW1tWptbVV/f78aGxslSUuWLNG0adMSU8gtLS2qqanRFVdcocHBQf385z/XE088oXXr1hmJ365IAAEAQMFYvHixTp48qVWrVikSiWjevHnavn17YmHIsWPH5Ha/NwHa39+v22+/Xa+//rrGjh2rWbNm6cc//rEWL16cq6+QFS7LutQtFoHs6+vrk8/n0w26VcWuMbkOBwBs66w1rJ16Rr29vUn3zGXDuX+rL/8f31TRuFIjfcbeHtAfG/57Tr5PIaMCCAAAzDI4BSxT/SAJi0AAAAAchgogAAAw6sM8w/difcE8KoAAAAAOQwUQAAAYlcttYJAeEkAAAGCW5TK3eIMEMCOYAgYAAHAYKoAAAMAoFoHYHxVAAAAAh6ECCAAAzLLePUz1BeNIAAEAgFGsArY/poABAAAchgogAAAwj6lbW6MCCAAA4DBUAAEAgFHcA2h/JIAAAMAsVgHbHlPAAAAADkMFEAAAGOZ69zDVF0yjAggAAOAwVAAxKi0tLXrqqad0+PBhjR07Vtdff72+973v6eqrr060GRgY0D//8z9r8+bNGhwcVH19vR599FH5/X7j8RRPq0jZ5uwbx41fF6NnXT83ZRvXS/8nC5EAGDXuAbQ9KoAYlV27dqmpqUm7d+/Wc889p+HhYd10003q7+9PtFmxYoWeffZZbd26Vbt27dLx48d122235TBqAEBGWYYPGEcFEKOyffv2pNePP/64pk6dqq6uLn36059Wb2+v1q9fr02bNmnBggWSpI0bN+qaa67R7t27NX/+/FyEDQCAo1EBhFG9vb2SpPLycklSV1eXhoeHFQqFEm1mzZqlGTNmqLOzMycxAgAyzHKZPWAcFUAYE4/HtXz5cn3iE5/QtddeK0mKRCIqKSnRxIkTk9r6/X5FIpEL9jU4OKjBwcHE676+vozEDACAE1EBhDFNTU16+eWXtXnz5lH31dLSIp/PlzgqKysNRAgAyAbLMnvAPBJAGNHc3Kyf/exneuGFFzR9+vTE+UAgoKGhIZ0+fTqpfTQaVSAQuGB/K1euVG9vb+Lo6enJVOgAANNYBGJ7JIAYFcuy1NzcrG3btun555/XzJkzk96vrq7WmDFj1NHRkTjX3d2tY8eOKRgMXrBfj8cjr9ebdAAAADO4BxCj0tTUpE2bNumZZ57RhAkTEvf1+Xw+jR07Vj6fT0uXLlU4HFZ5ebm8Xq/uuOMOBYNBVgADQKEyuXiDRSAZQQKIUVm3bp0k6YYbbkg6v3HjRv3d3/2dJOmhhx6S2+3WokWLkjaCzgQ2ec5fbPKMfFZcOT1lm7M9r2chEiA9JIAYFSuNu3NLS0vV1tamtra2LEQEAMg1l/XOYaovmEcCCAAAzOJRcLbHIhAAAACHoQIIAADMYhGI7VEBBAAAcBgqgAAAwCzuAbQ9EkAAAGAWCaDtMQUMAADgMFQAgTxy/GvXp2xT8eBLWYgEwPuxyfMHUAG0PSqAAAAADkMFEAAAmMU2MLZHAggAAIziUXD2xxQwAACAw1ABBAAAZrEIxPaoAAIAADgMCSAAAIDDMAUMAACMcsngIhAz3eADSACBPMImzwAAE0gAAQCAWewDaHvcAwgAAOAwVAABAIBZbANjeySAAADALBJA22MKGAAAwGGoAAIAAKN4FrD9UQEEAABwGCqAAADALO4BtD0SQAAAYBYJoO2RAKKg9P7t/JRtfD/enYVI3nN6STBlm4k/6sxCJJfm9FdTxy1JE58wE3vRX12dsk3slW4j10J+S+e3mc7v8sTt16d1vamPmnkCT9Hsv0zZpm/2pLT6Gv/TPaMNBw5HAggAAIxiEYj9kQACAACzeBSc7bEKGAAAwGGoAAIAALNYBGJ7VAABAAAchgogAAAwikUg9kcCCAAAzGIK2PaYAgYAAHAYKoAoKNne5DkddtzkOR2mNnhOF5s8I12mfpumNnhOV+zV36ZsM/7VLASSDQangKkAZgYVQAAAAIehAggAAMziHkDbIwEEAABmkQDaHlPAAAAADkMFEAAAGMU+gPZHBRAAAMBhSAABAAAchilgAABgFotAbI8EEAXFVXNtyjbW/pezEMl7Inden7JN4OHsbkibjuLK6Wm1O9vzeoYjcY7i6dNStjn7+htZiMTe8nWcTn81mLJNtjdgh3ORAAIAAKNYBGJ/3AMIAADgMFQAAQCAeVTubI0KIAAAMMsyfFyitrY2VVVVqbS0VHV1ddq7d+8F2z722GP61Kc+pUmTJmnSpEkKhUIXbV8oSAABAEDB2LJli8LhsFavXq0DBw5o7ty5qq+v14kTJ0Zsv3PnTn35y1/WCy+8oM7OTlVWVuqmm27SG2/YbyGRSSSAAADAqHOLQEwdl2Lt2rVatmyZGhsbNXv2bLW3t2vcuHHasGHDiO2ffPJJ3X777Zo3b55mzZqlH/7wh4rH4+ro6DAwEvZFAggAAGyvr68v6RgcHDyvzdDQkLq6uhQKhRLn3G63QqGQOjvT22Ln7bff1vDwsMrLy43FbkckgAAAwKwM3ANYWVkpn8+XOFpaWs677KlTpxSLxeT3+5PO+/1+RSKRtEL/xje+oYqKiqQkshCxChgFxX30zZRtYlmI4/2mPdmdsk22Y0qH9ec/5zoEx7EGBnIdQl7I13Ga/Ivfpmxjx38LPoxM7APY09Mjr9ebOO/xeMxc4H3WrFmjzZs3a+fOnSotLTXev52QAAIAANvzer1JCeBIpkyZoqKiIkWj0aTz0WhUgUDgop998MEHtWbNGv3yl7/UnDlzRh2v3TEFDAAAzMrRNjAlJSWqrq5OWsBxbkFHMHjhR/Hdf//9+u53v6vt27erpqYm/QvmMSqAAACgYITDYTU0NKimpka1tbVqbW1Vf3+/GhsbJUlLlizRtGnTEvcQfu9739OqVau0adMmVVVVJe4VLCsrU1lZWc6+R6aRAAIAALM+5AbOF+zrEixevFgnT57UqlWrFIlENG/ePG3fvj2xMOTYsWNyu9+bAF23bp2Ghob0xS9+Mamf1atX69vf/vZoo7ctEkAAAGBUJhaBXIrm5mY1NzeP+N7OnTuTXh89evTSL1AAuAcQAADAYagAAgAAs3I4BYz0UAEEAABwGCqAAADALCqAtkcCiIISO/WnXIdwHjvGlA47xn2k5cL7eL3fzJXpPfPTxPVMXUuy55ing3FKT77G/WHkehEIUmMKGAAAwGGoAAIAALOYArY9KoAAAAAOQwUQAAAYxT2A9kcCCAAAzGIK2PaYAgYAAHAYKoAAAMAsKoC2RwUQAADAYagAAsgbJjcTtuP18hXjhA9yvXuY6gvmkQACAACzmAK2PaaAAQAAHIYKIAAAMIp9AO2PCiAAAIDDUAEEAABmcQ+g7ZEAAgAA80jcbI0pYAAAAIehAggAAIxiEYj9UQEEAABwGBJAjMq6des0Z84ceb1eeb1eBYNB/eIXv0i8PzAwoKamJk2ePFllZWVatGiRotFoDiMGAGScZfiAcSSAGJXp06drzZo16urq0v79+7VgwQLdeuuteuWVVyRJK1as0LPPPqutW7dq165dOn78uG677bYcRw0AyKRzU8CmDpjHPYAYlVtuuSXp9X333ad169Zp9+7dmj59utavX69NmzZpwYIFkqSNGzfqmmuu0e7duzV//vxchAwAgONRAYQxsVhMmzdvVn9/v4LBoLq6ujQ8PKxQKJRoM2vWLM2YMUOdnRd/ePzg4KD6+vqSDgBAnmAK2PZIADFqhw4dUllZmTwej/7xH/9R27Zt0+zZsxWJRFRSUqKJEycmtff7/YpEIhfts6WlRT6fL3FUVlZm8BsAAOAsJIAYtauvvloHDx7Unj179E//9E9qaGjQq6++Oqo+V65cqd7e3sTR09NjKFoAQKZxD6D9cQ8gRq2kpERXXnmlJKm6ulr79u3Tww8/rMWLF2toaEinT59OqgJGo1EFAoGL9unxeOTxeDIZNgAgU3gUnO1RAYRx8Xhcg4ODqq6u1pgxY9TR0ZF4r7u7W8eOHVMwGMxhhAAAOBsVQIzKypUrdfPNN2vGjBk6c+aMNm3apJ07d2rHjh3y+XxaunSpwuGwysvL5fV6dccddygYDLICGAAKGRVA2yMBxKicOHFCS5Ys0Ztvvimfz6c5c+Zox44d+uxnPytJeuihh+R2u7Vo0SINDg6qvr5ejz76aI6jBgDA2UgAMSrr16+/6PulpaVqa2tTW1tbliICAOQazwK2PxJAAABgFlPAtsciEAAAAIehAggAAIxyWZZclpnSnal+kIwKIAAAgMNQAQQAAGZxD6DtkQACAACjWAVsf0wBAwAAOAwVQAB54+h96T1CsOpbnVm7nqlr5TPGCedhCtj2qAACAAA4DBVAAABgFPcA2h8JIAAAMIspYNtjChgAAMBhqAACAACjmAK2PxJAAABgFlPAtscUMAAAgMNQAQQAAMYxdWtvJIAAbOH4169P2abqWy9lIZL3X4/Ni9PBOEnDoeqUbcb8sitlm6H6mrSuV7Jjf1rtgAshAQQAAGZZ1juHqb5gHAkgAAAwilXA9sciEAAAAIehAggAAMxiGxjbowIIAADgMFQAAQCAUa74O4epvmAeCSAAADCLKWDbYwoYAADAYagAoqD8+dbalG3GPrM3C5G85+0v1KVsM27bnixEcmnSGUvJ3HhWPvVmyjYxI1dCvjP1d9733+andT3vpt0p26SzyXPx5VUp2wylE1AeYBsY+6MCCAAA4DBUAAEAgFk8CcT2SAABAIBRTAHbH1PAAAAADkMFEAAAmMU2MLZHBRAAAMBhqAACAACjuAfQ/kgAAQCAWawCtj0SQBSUdDZ/PXpvMK2+qu7qTN1o/pyUTey4yXM6sr1hduz3R7J6PUiq/WjqNnsPZT6OS2Tqt5nOBs8mnf3j0ZRtStJoA5hAAggAAIxiCtj+WAQCAADgMFQAAQCAWWwDY3skgAAAwCimgO2PKWAAAACHoQIIAADMilvvHKb6gnFUAAEAAByGCiAAADCLRSC2RwUQAAAY5dJ7C0FGfXyI67e1tamqqkqlpaWqq6vT3r0X3jz8lVde0aJFi1RVVSWXy6XW1tYP+7XzChVAOE5aT/hI1+7fmOsLyDYbPuUDGK0tW7YoHA6rvb1ddXV1am1tVX19vbq7uzV16tTz2r/99tu6/PLL9Td/8zdasWJFDiLODSqAAADArHPPAjZ1XIK1a9dq2bJlamxs1OzZs9Xe3q5x48Zpw4YNI7a/7rrr9MADD+hLX/qSPB6PiW+fF0gAAQBAQRgaGlJXV5dCoVDinNvtVigUUmenwdmfAsAUMAAAMCoTG0H39fUlnfd4POdV7E6dOqVYLCa/35903u/36/Dhw2YCKhBUAAEAgFmW4UNSZWWlfD5f4mhpacniFyo8VAABAIDt9fT0yOv1Jl6PdL/elClTVFRUpGg0mnQ+Go0qEAhkPMZ8QgUQAAAY5bIso4ckeb3epGOkBLCkpETV1dXq6OhInIvH4+ro6FAwGMza988HVAABAEDBCIfDamhoUE1NjWpra9Xa2qr+/n41NjZKkpYsWaJp06YlppCHhob06quvJv77jTfe0MGDB1VWVqYrr7wyZ98j00gAAQCAWfF3D1N9XYLFixfr5MmTWrVqlSKRiObNm6ft27cnFoYcO3ZMbvd7E6DHjx/Xxz72scTrBx98UA8++KA+85nPaOfOnSa+gS2RACKvFE30qshVcsH3Y6d7sxgN7Mo9b3bKNvGDr2YhEsCZ3j91a6KvS9Xc3Kzm5uYR3/tgUldVVSXLUKz5hHsAAQAAHIYKIAAAMOt927cY6QvGUQEEAABwGCqAAADArA/xDN+L9gXjSAABAIBRmXgUHMxiChgAAMBhqAACAACzmAK2PSqAAAAADkMFEHkldrpPLteYXIcBm2OTZyC3XPF3DlN9wTwSQAAAYBZTwLbHFDAAAIDDUAEEAABm8SQQ26MCCAAA4DBUAAEAgFEuy5LL0L17pvpBMhJAAABgFotAbI8pYAAAAIehAggAAMyyJJnav48CYEZQAQQAAHAYKoAAAMAoFoHYHwkgAAAwy5LBRSBmukEypoABAAAchgogAAAwi21gbI8KIAAAgMNQAQQAAGbFJbkM9gXjSAABAIBRrAK2P6aAAQAAHIYKIAAAMItFILZHBRBGrVmzRi6XS8uXL0+cGxgYUFNTkyZPnqyysjItWrRI0Wg0d0ECsK3er8xPeQAYPRJAGLNv3z79+7//u+bMmZN0fsWKFXr22We1detW7dq1S8ePH9dtt92WoygBABl3rgJo6oBxJIAw4q233tJXvvIVPfbYY5o0aVLifG9vr9avX6+1a9dqwYIFqq6u1saNG/XSSy9p9+7dOYwYAJAxJIC2RwIII5qamvT5z39eoVAo6XxXV5eGh4eTzs+aNUszZsxQZ2fnBfsbHBxUX19f0gEAAMxgEQhGbfPmzTpw4ID27dt33nuRSEQlJSWaOHFi0nm/369IJHLBPltaWvSd73zHdKgAgGxgH0DbowKIUenp6dGdd96pJ598UqWlpcb6XblypXp7exNHT0+Psb4BAJl1bh9AUwfMIwHEqHR1denEiRP6+Mc/ruLiYhUXF2vXrl165JFHVFxcLL/fr6GhIZ0+fTrpc9FoVIFA4IL9ejweeb3epAMAAJjBFDBG5cYbb9ShQ4eSzjU2NmrWrFn6xje+ocrKSo0ZM0YdHR1atGiRJKm7u1vHjh1TMBjMRcgAgExjH0DbIwHEqEyYMEHXXntt0rnx48dr8uTJifNLly5VOBxWeXm5vF6v7rjjDgWDQc2fz35eAADkAgkgMu6hhx6S2+3WokWLNDg4qPr6ej366KO5DguADfmezOL2ULUfTa/d3kMpm7g+9lcp21i/fiW96xWCuCW5DFXu4lQAM4EEEMbt3Lkz6XVpaana2trU1taWm4AAANnFFLDtsQgEAADAYagAAgAAw0w+wYMKYCZQAQQAAHAYKoAAAMAs7gG0PRJAAABgVtySsalbVgFnBFPAAAAADkMFEAAAmGXF3zlM9QXjSABRUPq+nPrpIt6fZHGjWUk9d12fsk3lvS9lIZJLk85YStkfz0JWPH1ayjZnX38jC5HYW+/fpv5t+n6c+nfpfns4reulk36ks8nz6a+mfvzllF8eSeNq0tk3I2m1Ay6EBBAAAJjFIhDbIwEEAABmsQjE9lgEAgAA4DBUAAEAgFlMAdseFUAAAACHoQIIAADMsmSwAmimGyQjAQQAAGYxBWx7TAEDAAA4DBVAFJRx0fQ2ds0mK0//yuw4loWOTZ7TMzzOZaSfoanj02pn6k948oH/m7JNwWzwHI8rvS200+0LplEBBAAAcJg8rU0AAADb4h5A2yMBBAAAZpEA2h5TwAAAAA5DBRAAAJjFs4BtjwogAACAw1ABBAAARllWXJZlZvsWU/0gGQkgAAAwy7LMTd2yCCQjmAIGAABwGCqAKCjFz3dl9XpLuntStvnR1S9lIRLzsj2WyL4Fh/pTtnn+o+k9LSObpvyg00g/2f6Nx17pzur1csoyuAiECmBGUAEEAABwGCqAAADArHhcchlavMEikIwgAQQAAGYxBWx7TAEDAAA4DBVAAABglBWPyzI0Bcw+gJlBBRAAAMBhqAACAACzuAfQ9kgAAQCAWXFLcpEA2hkJIDAKP7q6MtchOErkzuvTahd42Mzm2+lcz9S1csHUJs+FPk5AISIBBAAAZlmWJFP7AFIBzAQWgQAAADgMFUAAAGCUFbdkGboH0KICmBEkgAAAwCwrLnNTwOwDmAlMAQMAgILS1tamqqoqlZaWqq6uTnv37r1o+61bt2rWrFkqLS3VRz/6Uf385z/PUqS5QwIIAACMsuKW0eNSbNmyReFwWKtXr9aBAwc0d+5c1dfX68SJEyO2f+mll/TlL39ZS5cu1a9//WstXLhQCxcu1Msvv2xiKGyLBBAAABSMtWvXatmyZWpsbNTs2bPV3t6ucePGacOGDSO2f/jhh/W5z31O//Iv/6JrrrlG3/3ud/Xxj39c//Zv/5blyLOLewCRF87dBHxWw8Y2l0f+iQ0OpNXurDWcteuZulY+Y5zs5azeGetcLp44aw0au3fv3Pfp6+tLOu/xeOTxeJLODQ0NqaurSytXrkycc7vdCoVC6uzsHLH/zs5OhcPhpHP19fV6+umnDURvXySAyAtnzpyRJL2owr8vAxex7pm0mr2WxesZu1Y+Y5xs6cyZM/L5fFm9ZklJiQKBgF6MmP23uqysTJWVyRvvr169Wt/+9reTzp06dUqxWEx+vz/pvN/v1+HDh0fsOxKJjNg+EomMPnAbIwFEXqioqFBPT48mTJggl8ulvr4+VVZWqqenR16vN9fhOQJjnl2Md3YV0nhblqUzZ86ooqIi69cuLS3VkSNHNDQ0ZLRfy7LkcrmSzn2w+odLQwKIvOB2uzV9+vTzznu93rz/xzrfMObZxXhnV6GMd7Yrf+9XWlqq0tLSnFx7ypQpKioqUjQaTTofjUYVCARG/EwgELik9oWCRSAAAKAglJSUqLq6Wh0dHYlz8XhcHR0dCgaDI34mGAwmtZek55577oLtCwUVQAAAUDDC4bAaGhpUU1Oj2tpatba2qr+/X42NjZKkJUuWaNq0aWppaZEk3XnnnfrMZz6jf/3Xf9XnP/95bd68Wfv379cPfvCDXH6NjCMBRF7yeDxavXo194BkEWOeXYx3djHehWPx4sU6efKkVq1apUgkonnz5mn79u2JhR7Hjh2T2/3eBOj111+vTZs26a677tI3v/lNXXXVVXr66ad17bXX5uorZIXL4iF7AAAAjsI9gAAAAA5DAggAAOAwJIAAAAAOQwIIAADgMCSAyEttbW2qqqpSaWmp6urqtHfv3lyHVBB+9atf6ZZbblFFRYVcLtd5z8K0LEurVq3SZZddprFjxyoUCul3v/tdboItAC0tLbruuus0YcIETZ06VQsXLlR3d3dSm4GBATU1NWny5MkqKyvTokWLztu0Fulbt26d5syZk9jwORgM6he/+EXifcYbTkECiLyzZcsWhcNhrV69WgcOHNDcuXNVX1+vEydO5Dq0vNff36+5c+eqra1txPfvv/9+PfLII2pvb9eePXs0fvx41dfXa2BgIMuRFoZdu3apqalJu3fv1nPPPafh4WHddNNN6u/vT7RZsWKFnn32WW3dulW7du3S8ePHddttt+Uw6vw2ffp0rVmzRl1dXdq/f78WLFigW2+9Va+88ookxhsOYgF5pra21mpqakq8jsViVkVFhdXS0pLDqAqPJGvbtm2J1/F43AoEAtYDDzyQOHf69GnL4/FYP/nJT3IQYeE5ceKEJcnatWuXZVnvjO+YMWOsrVu3Jtq89tprliSrs7MzV2EWnEmTJlk//OEPGW84ChVA5JWhoSF1dXUpFAolzrndboVCIXV2duYwssJ35MgRRSKRpLH3+Xyqq6tj7A3p7e2VJJWXl0uSurq6NDw8nDTms2bN0owZMxhzA2KxmDZv3qz+/n4Fg0HGG47Ck0CQV06dOqVYLJbY0f0cv9+vw4cP5ygqZ4hEIpI04tifew8fXjwe1/Lly/WJT3wi8QSCSCSikpISTZw4MaktYz46hw4dUjAY1MDAgMrKyrRt2zbNnj1bBw8eZLzhGCSAAGADTU1Nevnll/Xiiy/mOpSCd/XVV+vgwYPq7e3VT3/6UzU0NGjXrl25DgvIKqaAkVemTJmioqKi81blRaNRBQKBHEXlDOfGl7E3r7m5WT/72c/0wgsvaPr06YnzgUBAQ0NDOn36dFJ7xnx0SkpKdOWVV6q6ulotLS2aO3euHn74YcYbjkICiLxSUlKi6upqdXR0JM7F43F1dHQoGAzmMLLCN3PmTAUCgaSx7+vr0549exj7D8myLDU3N2vbtm16/vnnNXPmzKT3q6urNWbMmKQx7+7u1rFjxxhzg+LxuAYHBxlvOApTwMg74XBYDQ0NqqmpUW1trVpbW9Xf36/GxsZch5b33nrrLf3+979PvD5y5IgOHjyo8vJyzZgxQ8uXL9e9996rq666SjNnztTdd9+tiooKLVy4MHdB57GmpiZt2rRJzzzzjCZMmJC4z8zn82ns2LHy+XxaunSpwuGwysvL5fV6dccddygYDGr+/Pk5jj4/rVy5UjfffLNmzJihM2fOaNOmTdq5c6d27NjBeMNZcr0MGfgwvv/971szZsywSkpKrNraWmv37t25DqkgvPDCC5ak846GhgbLst7ZCubuu++2/H6/5fF4rBtvvNHq7u7ObdB5bKSxlmRt3Lgx0ebPf/6zdfvtt1uTJk2yxo0bZ33hC1+w3nzzzdwFnef+/u//3vrIRz5ilZSUWH/xF39h3XjjjdZ//Md/JN5nvOEULsuyrBzlngAAAMgB7gEEAABwGBJAAAAAhyEBBAAAcBgSQAAAAIchAQQAAHAYEkAAAACHIQEEAABwGBJAAAAAhyEBBAAAcBgSQAAAAIchAQQAAHAYEkAAAACHIQEEAABwGBJAAAAAhyEBBAAAcBgSQAAAAIchAQQAAHCY/w8PHz4QCcC9OgAAAABJRU5ErkJggg==" alt="Code similarity matrix">
+      </div>
+      <div class="col">
+        <h4 style="text-align: center;">Similarity Score Distribution</h4>
+        <img src="data:image/png;base64, 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" alt="Code similarity histogram">
+      </div>
+    </div>
+    <p style="text-align: center">
+      <i>Note: a score of -1 in the similarity matrix indicates the comparison was skipped</i>
+    </p>
+
+    <div class="row" style="font-size: small;">
+      <div class="col3">
+        <p>
+          <b>Number of files tested (vertical):</b> 46<br>
+          <b>Number above display threshold:</b> 4 (8.70%)<br><br>
+          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-test-files" aria-expanded="false" aria-controls="collapse-test-files">
+            View <i>test</i> files
+          </button>
+        </p>
+        <div class="collapse" id="collapse-test-files">
+          <ul class="file-info-list">
+              <li>0=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\sidebar\SearchInput.jsx</li> 
+            
+              <li>1=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\controllers\auth.controller.js</li> 
+            
+              <li>2=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\pages\home\Home.jsx</li> 
+            
+              <li>3=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useSendMessage.js</li> 
+            
+              <li>4=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\db\connectToMongoDB.js</li> 
+            
+              <li>5=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\postcss.config.js</li> 
+            
+              <li>6=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useSignup.js</li> 
+            
+              <li>7=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\sidebar\LogoutButton.jsx</li> 
+            
+              <li>8=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\tailwind.config.js</li> 
+            
+              <li>9=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\message.model.js</li> 
+            
+              <li>10=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\server.js</li> 
+            
+              <li>11=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\messages\MessageInput.jsx</li> 
+            
+              <li>12=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\pages\signup\GenderCheckbox.jsx</li> 
+            
+              <li>13=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\messages\Message.jsx</li> 
+            
+              <li>14=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\controllers\user.controller.js</li> 
+            
+              <li>15=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\main.jsx</li> 
+            
+              <li>16=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\sidebar\Conversations.jsx</li> 
+            
+              <li>17=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\sidebar\Sidebar.jsx</li> 
+            
+              <li>18=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\eslint.config.js</li> 
+            
+              <li>19=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\skeletons\MessageSkeleton.jsx</li> 
+            
+              <li>20=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\context\SocketContext.jsx</li> 
+            
+              <li>21=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\messages\MessageContainer.jsx</li> 
+            
+              <li>22=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\middleware\protectRoute.js</li> 
+            
+              <li>23=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\vite.config.js</li> 
+            
+              <li>24=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useGetConversations.js</li> 
+            
+              <li>25=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\sidebar\Conversation.jsx</li> 
+            
+              <li>26=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\pages\login\Login.jsx</li> 
+            
+              <li>27=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\pages\signup\SignUp.jsx</li> 
+            
+              <li>28=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\routes\auth.routes.js</li> 
+            
+              <li>29=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\utils\emojis.js</li> 
+            
+              <li>30=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\utils\extractTime.js</li> 
+            
+              <li>31=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\zustand\useConversation.js</li> 
+            
+              <li>32=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\routes\user.routes.js</li> 
+            
+              <li>33=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\context\AuthContext.jsx</li> 
+            
+              <li>34=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useGetMessages.js</li> 
+            
+              <li>35=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\user.model.js</li> 
+            
+              <li>36=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\socket\socket.js</li> 
+            
+              <li>37=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\controllers\message.controller.js</li> 
+            
+              <li>38=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\App.jsx</li> 
+            
+              <li>39=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\components\messages\Messages.jsx</li> 
+            
+              <li>40=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\utils\generateToken.js</li> 
+            
+              <li>41=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useListenMessages.js</li> 
+            
+              <li>42=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useLogin.js</li> 
+            
+              <li>43=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\hooks\useLogout.js</li> 
+            
+              <li>44=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\conversation.model.js</li> 
+            
+              <li>45=C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\routes\message.routes.js</li> 
+            </ul>
+        </div>
+      </div>
+      <div class="col3">
+        <p>
+          <b>Number of reference files (horizontal):</b> 36<br><br><br>
+          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-reference-files" aria-expanded="false" aria-controls="collapse-reference-files">
+            View <i>reference</i> files
+          </button>
+        </p>
+        <div class="collapse" id="collapse-reference-files">
+          <ul class="file-info-list">
+              <li>0=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\config\db.js</li> 
+            
+              <li>1=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\miscellaneous\GroupChatModal.js</li> 
+            
+              <li>2=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\userModel.js</li> 
+            
+              <li>3=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\controllers\userControllers.js</li> 
+            
+              <li>4=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\chatModel.js</li> 
+            
+              <li>5=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\Authentication\Login.js</li> 
+            
+              <li>6=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\index.js</li> 
+            
+              <li>7=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\middleware\authMiddleware.js</li> 
+            
+              <li>8=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\ChatLoading.js</li> 
+            
+              <li>9=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\Chatbox.js</li> 
+            
+              <li>10=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\miscellaneous\UpdateGroupChatModal.js</li> 
+            
+              <li>11=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\userAvatar\UserListItem.js</li> 
+            
+              <li>12=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\reportWebVitals.js</li> 
+            
+              <li>13=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\Context\ChatProvider.js</li> 
+            
+              <li>14=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\routes\userRoutes.js</li> 
+            
+              <li>15=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\controllers\messageControllers.js</li> 
+            
+              <li>16=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\ScrollableChat.js</li> 
+            
+              <li>17=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\routes\messageRoutes.js</li> 
+            
+              <li>18=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\data\messages.js</li> 
+            
+              <li>19=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\miscellaneous\ProfileModal.js</li> 
+            
+              <li>20=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\Pages\Chatpage.js</li> 
+            
+              <li>21=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\userAvatar\UserBadgeItem.js</li> 
+            
+              <li>22=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\server.js</li> 
+            
+              <li>23=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\messageModel.js</li> 
+            
+              <li>24=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\data\data.js</li> 
+            
+              <li>25=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\routes\chatRoutes.js</li> 
+            
+              <li>26=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\config\ChatLogics.js</li> 
+            
+              <li>27=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\config\generateToken.js</li> 
+            
+              <li>28=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\miscellaneous\SideDrawer.js</li> 
+            
+              <li>29=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\controllers\chatControllers.js</li> 
+            
+              <li>30=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\SingleChat.js</li> 
+            
+              <li>31=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\middleware\errorMiddleware.js</li> 
+            
+              <li>32=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\Pages\Homepage.js</li> 
+            
+              <li>33=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\Authentication\Signup.js</li> 
+            
+              <li>34=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\components\MyChats.js</li> 
+            
+              <li>35=C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\App.js</li> 
+            </ul>
+        </div>
+      </div>
+      <div class="col3">
+        <p>
+          <b>Execution params (see <code>copydetect --help</code>):</b><br><br><br>
+          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-exec-params" aria-expanded="false" aria-controls="collapse-exec-params">
+            View execution parameters
+          </button>
+        </p>
+        <div class="collapse" id="collapse-exec-params">
+          <b>version:</b> 0.5.0<br>
+          <b>Configuration:</b>
+          <pre class="file-info-list">{
+    "extensions": [
+        "jsx",
+        "js"
+    ],
+    "same_name_only": false,
+    "ignore_leaf": false,
+    "disable_filtering": false,
+    "truncate": false,
+    "out_file": "./report.html",
+    "css_files": [],
+    "silent": false,
+    "encoding": "utf-8",
+    "window_size": 1,
+    "noise_threshold": 25,
+    "guarantee_threshold": 25,
+    "display_threshold": 0.33,
+    "test_directories": [
+        "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\test_directory"
+    ],
+    "reference_directories": [
+        "C:\\Users\\csidd\\OneDrive\\Desktop\\copy\\ref_directory\\mern-chat-app"
+    ],
+    "boilerplate_directories": [],
+    "disable_autoopen": false
+}</pre>
+        </div>
+      </div>
+    </div>
+
+
+  <h2>Matched Code</h2>
+  <table class="table table-striped table-sm">
+  <tbody class="table-light">
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\message.model.js</i> (<b>47.95%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\messageModel.js</i> (<b>57.91%</b>)<br>
+    Token overlap: 152<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-1">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code>import mongoose from &#39;mongoose&#39;;
+
+const messageSchema = new mongoose.Schema({
+    senderId<span class='highlight-red'>:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:&#34;User&#34;</span>,
+        required:true
+    },
+    receiverId<span class='highlight-red'>:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:&#34;User&#34;</span>,
+        required:true
+    },
+    message:{
+        type:String,
+        required:true
+    }
+<span class='highlight-red'>},{timestamps:true});
+
+const Message = mongoose.model(&#34;Message&#34;,messageSchema);
+
+</span>export default Message;</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code>const mongoose = require(&#34;mongoose&#34;);
+
+const messageSchema = mongoose.Schema(
+  {
+    sender<span class='highlight-green'>: { type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>},
+    content: { type: String, trim: true },
+    chat<span class='highlight-green'>: { type: mongoose.Schema.Types.ObjectId, ref: &#34;Chat&#34; </span>},
+    readBy: [<span class='highlight-green'>{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>}],
+  <span class='highlight-green'>},
+  { timestamps: true }
+);
+
+const Message = mongoose.model(&#34;Message&#34;, messageSchema);
+</span>module.exports = Message;
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\conversation.model.js</i> (<b>41.24%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\chatModel.js</i> (<b>42.02%</b>)<br>
+    Token overlap: 120<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-2">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code>import mongoose from &#39;mongoose&#39;;
+
+const conversationSchema = new mongoose.Schema({
+    participant<span class='highlight-red'>s:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:&#34;User&#34;,
+        }
+    </span>],
+    message<span class='highlight-red'>s:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:&#34;Message&#34;,
+            </span>default:[]
+        }
+    ]
+<span class='highlight-red'>},{timestamps:true});
+
+const C</span>onversation = mongoose.model(&#34;Conversation&#34;, conversationSchema);
+
+export default Conversation;</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code>const mongoose = require(&#34;mongoose&#34;);
+
+const chatModel = mongoose.Schema(
+  {
+    chatName: { type: String, trim: true },
+    isGroupChat: { type: Boolean, default: false },
+    user<span class='highlight-green'>s: [{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>}],
+    latestMessage: <span class='highlight-green'>{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: &#34;Message&#34;,
+    }</span>,
+    groupAdmin: <span class='highlight-green'>{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>},
+  <span class='highlight-green'>},
+  { timestamps: true }
+);
+
+const C</span>hat = mongoose.model(&#34;Chat&#34;, chatModel);
+
+module.exports = Chat;
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\conversation.model.js</i> (<b>39.18%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\messageModel.js</i> (<b>45.97%</b>)<br>
+    Token overlap: 114<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-3">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code>import mongoose from &#39;mongoose&#39;;
+
+const conversationSchema = new mongoose.Schema({
+    participants<span class='highlight-red'>:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:&#34;User&#34;</span>,
+        }
+    ],
+    messages<span class='highlight-red'>:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:&#34;Message&#34;</span>,
+            default:[]
+        }
+    ]
+<span class='highlight-red'>},{timestamps:true});
+
+const </span>Conversation = mongoose.model(&#34;Conversation&#34;, conversationSchema);
+
+export default Conversation;</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code>const mongoose = require(&#34;mongoose&#34;);
+
+const messageSchema = mongoose.Schema(
+  {
+    sender: <span class='highlight-green'>{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>},
+    content: { type: String, trim: true },
+    chat: <span class='highlight-green'>{ type: mongoose.Schema.Types.ObjectId, ref: &#34;Chat&#34; </span>},
+    readBy<span class='highlight-green'>: [{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>}],
+  <span class='highlight-green'>},
+  { timestamps: true }
+);
+
+const </span>Message = mongoose.model(&#34;Message&#34;, messageSchema);
+module.exports = Message;
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\models\message.model.js</i> (<b>35.96%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\models\chatModel.js</i> (<b>41.22%</b>)<br>
+    Token overlap: 114<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-4">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code>import mongoose from &#39;mongoose&#39;;
+
+const messageSchema = new mongoose.Schema({
+    senderId<span class='highlight-red'>:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:&#34;User&#34;,
+        </span>required:true
+    },
+    receiverId<span class='highlight-red'>:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:&#34;User&#34;,
+        </span>required:true
+    },
+    message:{
+        type:String,
+        required:true
+    }
+<span class='highlight-red'>},{timestamps:true});
+
+const </span>Message = mongoose.model(&#34;Message&#34;,messageSchema);
+
+export default Message;</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code>const mongoose = require(&#34;mongoose&#34;);
+
+const chatModel = mongoose.Schema(
+  {
+    chatName: { type: String, trim: true },
+    isGroupChat: { type: Boolean, default: false },
+    users: [<span class='highlight-green'>{ type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>}],
+    latestMessage<span class='highlight-green'>: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: &#34;Message&#34;,
+    </span>},
+    groupAdmin<span class='highlight-green'>: { type: mongoose.Schema.Types.ObjectId, ref: &#34;User&#34; </span>},
+  <span class='highlight-green'>},
+  { timestamps: true }
+);
+
+const </span>Chat = mongoose.model(&#34;Chat&#34;, chatModel);
+
+module.exports = Chat;
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\frontend\src\main.jsx</i> (<b>35.47%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\frontend\src\index.js</i> (<b>38.72%</b>)<br>
+    Token overlap: 127<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-5">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code><span class='highlight-red'>import React from &#34;react&#34;;
+import ReactDOM from &#34;react-dom/client&#34;;
+import </span>App from &#34;./App.jsx&#34;;
+import <span class='highlight-red'>&#34;./index.css&#34;;
+import { BrowserRouter } from &#34;react-router-dom&#34;;
+</span>import { AuthContextProvider } from &#34;./context/AuthContext.jsx&#34;;
+import { SocketContextProvider } from &#34;./context/SocketContext.jsx&#34;;
+
+ReactDOM.createRoot(<span class='highlight-red'>document.getElementById(&#34;root&#34;))</span>.render(
+	&lt;React.StrictMode&gt;
+		&lt;BrowserRouter&gt;
+			&lt;AuthContextProvider&gt;
+				&lt;SocketContextProvider&gt;
+					&lt;App /&gt;
+				&lt;/SocketContextProvider&gt;
+			&lt;/AuthContex<span class='highlight-red'>tProvider&gt;
+		&lt;/BrowserRouter&gt;
+	&lt;/</span>React.StrictMode&gt;
+);</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code><span class='highlight-green'>import React from &#34;react&#34;;
+import ReactDOM from &#34;react-dom&#34;;
+import </span>&#34;./index.css&#34;;
+import App from &#34;./App&#34;;
+import reportWebVitals from &#34;./reportWebVitals&#34;;
+import { ChakraProvider } from &#34;@chakra-ui/react&#34;;
+import ChatProvider from <span class='highlight-green'>&#34;./Context/ChatProvider&#34;;
+import { BrowserRouter } from &#34;react-router-dom&#34;;
+
+</span>ReactDOM.render(
+  &lt;ChakraProvider&gt;
+    &lt;BrowserRouter&gt;
+      &lt;ChatProvider&gt;
+        &lt;App /&gt;
+      &lt;/Cha<span class='highlight-green'>tProvider&gt;
+    &lt;/BrowserRouter&gt;
+  &lt;/</span>ChakraProvider&gt;,
+  <span class='highlight-green'>document.getElementById(&#34;root&#34;)
+)</span>;
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  <tr>
+  <td style="text-align: center;">
+  <p>
+    Test file: <i>C:\Users\csidd\OneDrive\Desktop\copy\test_directory\backend\server.js</i> (<b>35.14%</b>)<br>
+    Reference file: <i>C:\Users\csidd\OneDrive\Desktop\copy\ref_directory\mern-chat-app\backend\server.js</i> (<b>16.17%</b>)<br>
+    Token overlap: 194<br><br>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
+      View matched code
+    </button>
+  </p>
+  <div class="collapse" id="collapse-6">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col code-display">
+          <pre><code>import express from &#34;express&#34;;
+import dotenv from &#34;dotenv&#34;;
+import cookieParser from &#34;cookie-parser&#34;;
+import path from &#34;path&#34;;
+
+import authRoutes from &#34;./routes/auth.routes.js&#34;;
+import messageRoutes from &#34;./routes/message.routes.js&#34;;
+import userRoutes from &#34;./routes/user.routes.js&#34;;
+import { app, server } from &#34;./socket/socket.js&#34;;
+
+dotenv.config();
+import connectToMongoDB from &#34;./db/connectToMongoDB.js&#34;
+
+
+<span class='highlight-red'>const PORT = process.env.PORT </span>|| 5000;
+const __dirname = path.resolve<span class='highlight-red'>();
+
+app.use(express.json()); // to parse incoming requests with JSON payloads (from req.body)
+app.use(</span>cookieParser());
+app.use(&#34;/api/auth&#34;,auth<span class='highlight-red'>Routes);
+app.use(&#34;/api/messages&#34;,messageRoutes);
+app.use(&#34;/api/users&#34;,userRoutes);
+
+app.use(express.static(path.join(__dirname</span><span class='highlight-red'>,&#34;/frontend/dist&#34;)));
+
+app.get(&#34;*&#34;,(req,res)=&gt;{
+    res.send</span>File(path.join(__dirname, &#34;frontend&#34;, &#34;dist&#34;, &#34;index.html&#34;));
+})
+
+server.listen(PORT,()=&gt;{
+    connectToMongoDB();
+    // console.log(`Server running on port ${PORT}`)
+});</code></pre>
+        </div>
+        <div class="col code-display">
+          <pre><code>const express = require(&#34;express&#34;);
+const connectDB = require(&#34;./config/db&#34;);
+const dotenv = require(&#34;dotenv&#34;);
+const userRoutes = require(&#34;./routes/userRoutes&#34;);
+const chatRoutes = require(&#34;./routes/chatRoutes&#34;);
+const messageRoutes = require(&#34;./routes/messageRoutes&#34;);
+const { notFound, errorHandler } = require(&#34;./middleware/errorMiddleware&#34;);
+const path = require(&#34;path&#34;);
+
+dotenv.config();
+connectDB();
+const app = express<span class='highlight-green'>();
+
+app.use(express.json()); // to accept json data
+
+// app.get(&#34;/&#34;, (req, res) =&gt; {
+//   res.send(&#34;API Running!&#34;);
+// });
+
+app.use(&#34;/api/user&#34;, userRoutes);
+app.use(</span>&#34;/api/chat&#34;, chat<span class='highlight-green'>Routes);
+app.use(&#34;/api/message&#34;, messageRoutes);
+
+// --------------------------deployment------------------------------
+
+</span>const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === &#34;production&#34;) {
+  <span class='highlight-green'>app.use(express.static(path.join(__dirname</span>1<span class='highlight-green'>, &#34;/frontend/build&#34;)));
+
+  app.get(&#34;*&#34;, (req, res) =&gt;
+    </span>res.sendFile(path.resolve(__dirname1, &#34;frontend&#34;, &#34;build&#34;, &#34;index.html&#34;))
+  );
+} else {
+  <span class='highlight-green'>app.get(&#34;/&#34;, (req, res) =&gt; {
+    res.send</span>(&#34;API is running..&#34;);
+  });
+}
+
+// --------------------------deployment------------------------------
+
+// Error Handling middlewares
+app.use(notFound);
+app.use(errorHandler);
+
+<span class='highlight-green'>const PORT = process.env.PORT</span>;
+
+const server = app.listen(
+  PORT,
+  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
+);
+
+const io = require(&#34;socket.io&#34;)(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: &#34;http://localhost:3000&#34;,
+    // credentials: true,
+  },
+});
+
+io.on(&#34;connection&#34;, (socket) =&gt; {
+  console.log(&#34;Connected to socket.io&#34;);
+  socket.on(&#34;setup&#34;, (userData) =&gt; {
+    socket.join(userData._id);
+    socket.emit(&#34;connected&#34;);
+  });
+
+  socket.on(&#34;join chat&#34;, (room) =&gt; {
+    socket.join(room);
+    console.log(&#34;User Joined Room: &#34; + room);
+  });
+  socket.on(&#34;typing&#34;, (room) =&gt; socket.in(room).emit(&#34;typing&#34;));
+  socket.on(&#34;stop typing&#34;, (room) =&gt; socket.in(room).emit(&#34;stop typing&#34;));
+
+  socket.on(&#34;new message&#34;, (newMessageRecieved) =&gt; {
+    var chat = newMessageRecieved.chat;
+
+    if (!chat.users) return console.log(&#34;chat.users not defined&#34;);
+
+    chat.users.forEach((user) =&gt; {
+      if (user._id == newMessageRecieved.sender._id) return;
+
+      socket.in(user._id).emit(&#34;message recieved&#34;, newMessageRecieved);
+    });
+  });
+
+  socket.off(&#34;setup&#34;, () =&gt; {
+    console.log(&#34;USER DISCONNECTED&#34;);
+    socket.leave(userData._id);
+  });
+});
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+  
+  </tbody>
+  </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+</body>
