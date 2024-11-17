@@ -1,10 +1,5 @@
 /* General styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding-left: 0%;
-  }
+
   
   /* Dark Mode */
   body.dark-mode {
@@ -14,7 +9,7 @@ body {
   
   /* Navbar styles */
   .navbar {
-    position: fixed;
+    
     top: 0;
     left: 0;
     width: 100%;

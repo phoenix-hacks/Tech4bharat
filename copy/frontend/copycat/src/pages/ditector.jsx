@@ -1,71 +1,96 @@
 import React, { useState } from 'react';
-import '../css/ditector.css'; // Importing CSS for styling
+import '../css/ditector.css';
+import { Link } from 'react-router-dom';
+import Plagiarism from './plagiarism.jsx';
+
 
 const PlagiarismChecker = () => {
-  const [repo1File, setRepo1File] = useState(null);
-  const [repo2File, setRepo2File] = useState(null);
-  const [result, setResult] = useState(null);
+  const [repoUrls, setRepoUrls] = useState(["", ""]); // Holds URLs of the repositories
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState("");
 
-  // Function to handle file selection for Repository 1
-  const handleRepo1FileChange = (e) => {
-    setRepo1File(e.target.files[0]);
+  // Handle URL change
+  const handleRepoChange = (index, value) => {
+    const updatedUrls = [...repoUrls];
+    updatedUrls[index] = value;
+    setRepoUrls(updatedUrls);
   };
 
-  // Function to handle file selection for Repository 2
-  const handleRepo2FileChange = (e) => {
-    setRepo2File(e.target.files[0]);
-  };
-
-  // Function to compare files and check for plagiarism
-  const checkPlagiarism = () => {
-    if (!repo1File || !repo2File) {
-      alert('Please select both files.');
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!repoUrls[0] || !repoUrls[1]) {
+      setError("Please enter URLs for both repositories.");
       return;
     }
+    setLoading(true);
+    setError("");
 
-    // Simulate plagiarism check (in real scenarios, you would use a library or API to compare contents)
-    const reader1 = new FileReader();
-    const reader2 = new FileReader();
-
-    reader1.onload = () => {
-      reader2.onload = () => {
-        const content1 = reader1.result;
-        const content2 = reader2.result;
-
-        // Simple plagiarism check: comparing contents as strings
-        if (content1 === content2) {
-          setResult('Files are identical! Plagiarism detected.');
-        } else {
-          setResult('Files are different. No plagiarism detected.');
-        }
-      };
-      reader2.readAsText(repo2File);
-    };
-    reader1.readAsText(repo1File);
+    try {
+      // Your API call and other logic
+      const response = await fetch('http://localhost:3001/api/ditector', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repos: repoUrls }),
+      });
+    
+      const data = await response.json();
+      setResults(data); // Store results in state
+    } catch (err) {
+      setError("An error occurred while checking the repositories.");
+    } finally {
+      setLoading(false);
+    }
+    
   };
 
-  // Check if both files are selected
-  const isAnalyzeDisabled = !repo1File || !repo2File;
-
   return (
-    <div className="plagiarism-container">
-      <h2>Plagiarism Checker</h2>
-      <div className="file-upload-container">
-        <div className="file-upload">
-          <input type="file" id="repo1File" onChange={handleRepo1FileChange} />
-          <label htmlFor="repo1File">Upload file from Repository 1</label>
+    <div className="plagiarism-checker">
+      <h1>Plagiarism Checker for GitHub Repositories</h1>
+
+      <form onSubmit={handleSubmit}>
+        <div className="input-container">
+          <label>Repository 1 URL:</label>
+          <input
+            type="url"
+            value={repoUrls[0]}
+            onChange={(e) => handleRepoChange(0, e.target.value)}
+            placeholder="Enter test Repository URL"
+          />
         </div>
-        <div className="file-upload">
-          <input type="file" id="repo2File" onChange={handleRepo2FileChange} />
-          <label htmlFor="repo2File">Upload file from Repository 2</label>
+
+        <div className="input-container">
+          <label>Repository 2 URL:</label>
+          <input
+            type="url"
+            value={repoUrls[1]}
+            onChange={(e) => handleRepoChange(1, e.target.value)}
+            placeholder="Enter reference Repository URL"
+          />
         </div>
+        
+
+        <button type="submit" disabled={loading}>Check Plagiarism</button>
+      </form>
+
+      {error && <p className="error">{error}</p>}
+
+      {loading && <p>Loading...</p>}
+
+      {results && (
+        <div className="results">
+          <h2>Plagiarism Check Results</h2>
+          {/* Display results here */}
+          <pre>{JSON.stringify(results, null, 2)}</pre>
+        </div>
+        
+      )}
+      <div>
+        <Link to={"/Plagiarism"}>
+      <h4>Custom Tester</h4>
+      </Link>
       </div>
-
-      <button className="check-btn" onClick={checkPlagiarism} disabled={isAnalyzeDisabled}>
-        Analyze
-      </button>
-
-      {result && <div className="result">{result}</div>}
     </div>
   );
 };

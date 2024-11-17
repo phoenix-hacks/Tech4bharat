@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from '../assets/Image/logo.png';
 import '../css/Navbar.css'
 import { FaHome} from "react-icons/fa";
+import Home from '../pages/Home.jsx';
+import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
@@ -25,8 +27,10 @@ const Navbar = () => {
     <nav className="navbar">
       {/* Home Icon */}
       <div className="home">
+        <Link to={"/"}>
       <FaHome style={{ marginRight: "8px" }} />
         <span>Home</span>
+        </Link>
       </div>
       {/* Logo */}
       <div className="logo">

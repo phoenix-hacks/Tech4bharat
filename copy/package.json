@@ -4,6 +4,7 @@
   "main": "f.js",
   "scripts": {
     "start": "node res.js && npm run clearCache",
+    "start1": "npm run clearCache && npm run clearInput && node res1.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clearCache": "rm -rf ref_directory/ && mkdir ref_directory",
     "clearInput": "rm -rf test_directory/ && mkdir test_directory"
@@ -17,6 +18,7 @@
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1"
   }

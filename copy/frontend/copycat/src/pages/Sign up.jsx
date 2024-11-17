@@ -3,7 +3,8 @@ import '../css/signup.css'; // Make sure to include the corresponding CSS file
 import { FaGithub } from "react-icons/fa"; // GitHub Icon
 import google from '../assets/Image/google.png';
 import { Link } from "react-router-dom";
-import useSignup from "../hooks/useSignup.jsx";
+import useSignup from "../hooks/useSignup.js";
+
 const SignUp = () => {
 
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const SignUp = () => {
     gender: '',
   });
 
+  const { loading, signup } = useSignup();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,15 +24,19 @@ const SignUp = () => {
       [name]: value,
     }));
   };
-  const { loading, signup } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(inputs);
+    // Pass the correct state 'formData' to the signup function
+    await signup(formData);
   };
 
   return (
     <div className="container">
+      <div className='la'>
+        <br>
+        </br>
+      </div>
       <form onSubmit={handleSubmit} className="signup-form">
         <h2 className='signup1'>Sign Up</h2>
 
@@ -39,8 +46,8 @@ const SignUp = () => {
             id="name"
             name="name"
             placeholder="John Doe"
-            value={inputs.fullName}
-            onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
+            value={formData.name}
+            onChange={handleChange}
             required
           />
         </div>
@@ -51,7 +58,8 @@ const SignUp = () => {
             id="username"
             name="username"
             placeholder="username_1"
-            value={inputs.username} onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
+            value={formData.username} 
+            onChange={handleChange}
             required
           />
         </div>
@@ -62,7 +70,8 @@ const SignUp = () => {
             id="password"
             name="password"
             placeholder="********"
-            value={inputs.password} onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
+            value={formData.password} 
+            onChange={handleChange}
             required
           />
         </div>
@@ -73,7 +82,8 @@ const SignUp = () => {
             id="confirmPassword"
             name="confirmPassword"
             placeholder="********"
-            value={inputs.confirmPassword} onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
+            value={formData.confirmPassword} 
+            onChange={handleChange}
             required
           />
         </div>
@@ -95,19 +105,17 @@ const SignUp = () => {
             <option value="other">Other</option>
           </select>
         </div>
+        
         <p>Or Login with</p>
         <div className="social-login">
+          <div className="social-buttons">
+            <button type="button" className="google-btn">
+              <img src={google} alt='google' height={26} width={26}></img><div>Continue with Google</div>
+            </button>
 
-          <div>
-            <div className="social-buttons">
-              <button type="button" className="google-btn">
-                <img src={google} alt='google' height={26} width={26}></img><div>  Continue with Google</div>
-              </button>
-
-              <button type="button" className="github-btn">
-                <FaGithub style={{ marginRight: "8px" }} /><div> Continue with GitHub</div>
-              </button>
-            </div>
+            <button type="button" className="github-btn">
+              <FaGithub style={{ marginRight: "8px" }} /><div>Continue with GitHub</div>
+            </button>
           </div>
         </div>
 
@@ -116,9 +124,7 @@ const SignUp = () => {
         </button>
 
         <p className="login-link">
-          <Link to={"/login"} >
-            Already have an account?
-          </Link>
+          <Link to={"/login"}>Already have an account?</Link>
         </p>
       </form>
     </div>

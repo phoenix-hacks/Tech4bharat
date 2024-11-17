@@ -1,63 +1,72 @@
-import React from 'react';
-import '../css/Login.css';
-// Import the corresponding CSS file
-import { FaGoogle, FaGithub } from 'react-icons/fa';
-
+import React, { useState } from 'react';
+import '../css/Login.css'; // Importing the CSS file
 import { Link } from "react-router-dom";
-import useLogin from "../hooks/useLogin.jsx";
+import ditector from '../pages/ditector.jsx';
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
+const LoginPage = () => {
+  // State to store the form data
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-	const { loading, login } = useLogin();
-  
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		await login(username, password);
-	};
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked!");
-  };
-
-  const handleGithubLogin = () => {
-    console.log("GitHub login clicked!");
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Logging in with Email: ${email}`);
+    // Logic for form submission here (e.g., API call for login)
   };
 
   return (
     <div className="login-container">
-      <div className="login-box">
+      <div className="login-card">
         <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <input type="text" placeholder="Username" required value={username}
-							onChange={(e) => setUsername(e.target.value)}/>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
           </div>
-          <div className="input-group">
-            <input type="password" placeholder="Password" required value={password}
-							onChange={(e) => setPassword(e.target.value)}/>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <div className="password-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
-          <div className="forgot-password">
-            <a href="#"><Link to='/signup'>
-						{"Don't"} have an account?
-					</Link></a>
+          <div className="form-actions">
+            <Link to={"/ditector"}><button type="submit" className="login-btn" >Login</button></Link>
+            <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
           </div>
-          <button type="submit" className="login-btn">Login</button>
         </form>
-        <p>Or login with:</p>
+
         <div className="social-login">
-          <button onClick={handleGoogleLogin} className="google-btn">
-            <FaGoogle className="icon" />
-            Google
-          </button>
-          <button onClick={handleGithubLogin} className="github-btn">
-            <FaGithub className="icon" />
-            GitHub
-          </button>
+          <button className="google-btn">Login with Google</button>
+          <button className="github-btn">Login with GitHub</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

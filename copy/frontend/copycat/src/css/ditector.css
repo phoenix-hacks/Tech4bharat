@@ -1,89 +1,75 @@
-/* src/css/ditector.css */
+.plagiarism-checker {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
-.plagiarism-container {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .plagiarism-container h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .file-upload-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .file-upload {
-    width: 48%;
-    text-align: center;
-  }
-  
-  .file-upload input[type="file"] {
-    display: none;
-  }
-  
-  .file-upload label {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .file-upload label:hover {
-    background-color: #45a049;
-  }
-  
-  .file-upload p {
-    margin-top: 10px;
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .check-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.2rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .check-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .check-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .result {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-  
-  .result p {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-  
+.plagiarism-checker h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.input-container label {
+  display: block;
+  font-weight: bold;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 12px 25px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.results {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.results pre {
+  font-size: 1rem;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
